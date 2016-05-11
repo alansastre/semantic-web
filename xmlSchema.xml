@@ -84,9 +84,12 @@ Indica que los elementos definidos por el schema vienen del namespace "http://gi
 
 4 - elementFormDefault="qualified"
 
-Optional. The form for elements declared in the target namespace of this schema. The value must be "qualified" or "unqualified". Default is "unqualified". "unqualified" indicates that elements from the target namespace are not required to be qualified with the namespace prefix. "qualified" indicates that elements from the target namespace must be qualified with the namespace prefix
+Optional. The form for elements declared in the target namespace of this schema. The value must be "qualified" or "unqualified".
+Default is "unqualified". "unqualified" indicates that elements from the target namespace are not required to be qualified with
+the namespace prefix. "qualified" indicates that elements from the target namespace must be qualified with the namespace prefix
 
-Básicamente se resume en que si es qualified como en este caso es obligatorio en el xml de arriba especificar el prefijo del namespace targetNamespace en los elementos que pertenezcan al mismo, como ocurre en este caso, todos tienen el prefijo pers:. 
+Básicamente se resume en que si es qualified como en este caso es obligatorio en el xml de arriba especificar el prefijo del
+namespace targetNamespace en los elementos que pertenezcan al mismo, como ocurre en este caso, todos tienen el prefijo pers:. 
 
 
 Ocurre lo mismo para el caso de los atributos pero utilizando: attributeFormDefault
@@ -605,7 +608,8 @@ restricción y un atributo -->
 							<element name="estadoCivil">
 								<complexType>
 									<simpleContent>
-										<!-- Para poder extender el tipoEstadoCivil en el atributo hay que declararlo fuera-->
+										<!-- Para poder extender el tipoEstadoCivil
+										en el atributo hay que declararlo fuera-->
 										<extension base="target:tipoEstadoCivil">
 											<attribute name="fecha" type="integer"/>
 										</extension>
