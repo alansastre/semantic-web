@@ -1,0 +1,65 @@
+<!--  XML Schema Resumen de declaraciones de elementos -->
+
+
+ <!-- Elemento simple -->
+ <!-- Elemento con tipo de datos básico sin atributos -->
+ <element name="nombre" type="string"/>
+ <!-- Elemento con tipo de datos simple definido por el usuario -->
+ <element name="edad">
+ 	<simpleType>
+ 		<restriction base="integer">
+ 			<minInclusive value="0"/>
+ 			<maxInclusive value="100"/>
+ 		</restriction>
+ 	</simpleType>
+ </element>
+
+ <!-- ********************************************************************************************** -->
+
+ <!-- Elemento complejo -->
+<!-- Elemento con elementos en su contenido, con o sin atributos -->
+<element name="persona">
+	<complexType>
+		<sequence>
+			<element name="nombre" type="string"/>
+			<element name="apellido" type="string"/>
+			<element name="edad" type="integer"/>
+		</sequence>
+	</complexType>
+	<!-- Los atributos van aquí -->
+	<attribute name="sexo" type="string"/>
+</element>
+
+ <!-- ********************************************************************************************** -->
+
+<!-- Elemento con tipo de datos básico con atributos -->
+<element name="estadoCivil">
+	<complexType>
+		<simpleContent>
+			<extension base="string"/>
+				<attribute name="fecha" type="integer"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+</element>
+
+ <!-- ********************************************************************************************** -->
+
+<!-- Elemento con tipo de datos simple definido por el usuario y con atributos -->
+<simpleType name="tipoEstadoCivil">
+	<restriction base="string">
+		<enumeration value="soltero"/>
+		<enumeration value="casado"/>
+		<enumeration value="divorciado"/>
+	</restriction>
+</simpleType>
+<element name="estadoCivil">
+	<complexType>
+		<simpleContent>
+			<!-- Para poder extender el tipoEstadoCivil en el atributo hay que declararlo fuera -->
+			<extension base="target:tipoEstadoCivil">
+				<attribute name="fecha" type="integer"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+</element>
