@@ -1,0 +1,150 @@
+<!--  XML NAMESPACES -->
+
+
+<!-- Documento XML bien formado, sin namespaces ni DTD ni Schema. -->
+<?xml version="1.0" encoding="utf-8"?>
+<persona>
+	<nombre>
+		Armando
+	</nombre>
+	<apellido>
+		Ruido
+	</apellido>
+</persona>
+
+
+
+<!-- Documento XML con namespace. -->
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas xmlns:pers="http://github.com/alansastre/xml-examples/personas">
+	<pers:nombre>
+		Armando
+	</pers:nombre>
+	<pers:apellido>
+		Ruido
+	</pers:apellido>
+</pers:personas>
+
+
+
+<!-- Documento XML con namespace y etiqueta que no pertenece a ningún namespace. -->
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas xmlns:pers="http://github.com/alansastre/xml-examples/personas">
+	<pers:nombre>
+		Armando
+	</pers:nombre>
+	<apellido> <!--Esta etiqueta no pertenece a ningún namespace-->
+		Ruido
+	<apellido>
+</pers:personas>
+
+
+<!-- Documento XML con namespace por defecto en elemento root.
+Todos los elementos que no tengan prefijo estarán referidos a este namespace.
+El namespace está disponible para los hijos del elemento donde aparece declarado. -->
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas xmlns:pers="http://github.com/alansastre/xml-examples/personas">
+	<nombre>
+		Armando
+	</nombre>
+	<apellido>
+		Ruido
+	</apellido>
+</personas>
+
+
+<!-- Documento XML con namespace por defecto en elemento root
+Se resetea el namespace por defecto en el elemento <apellido> -->
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas xmlns:pers="http://github.com/alansastre/xml-examples/personas">
+	<nombre>
+		Armando
+	</nombre>
+	<apellido xmlns=""><!--Se necesita poner esto porque ahora todas
+	las etiquetas que no lleven prefijo están referidas al namespace por
+	defecto-->
+		Ruido
+	</apellido>
+</personas>
+
+
+<!-- Documento XML con dos namespaces declarados en el elemento root -->
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas xmlns:pers="http://github.com/alansastre/xml-examples/personas"
+				xmlns:masc="http://github.com/alansastre/xml-examples/mascotas">
+	<pers:nombre>
+		Armando
+	</pers:nombre>
+	<pers:apellido>
+		Ruido
+	</pers:apellido>
+	<masc:mascota>
+		<masc:nombre>
+			Zapato
+		</masc:nombre>
+		<masc:peso>
+			78
+		</masc:peso>
+	</masc:mascota>
+</pers:personas>
+
+
+<!-- Documento XML con dos namespaces declarados en diferentes elementos -->
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas xmlns:pers="http://github.com/alansastre/xml-examples/personas">
+	<pers:nombre>
+		Oscar
+	</pers:nombre>
+	<pers:apellido>
+		Nívoro
+	</pers:apellido>
+	<masc:mascota xmlns:masc="http://github.com/alansastre/xml-examples/mascotas">
+		<masc:nombre>
+			Cocodrilo Dundee
+		</masc:nombre>
+		<masc:peso>
+			21
+		</masc:peso>
+	</masc:mascota>
+</pers:personas>
+
+
+<!-- Igual que el anterior pero declarando el segundo namespace por defecto -->
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas xmlns:pers="http://github.com/alansastre/xml-examples/personas">
+	<pers:nombre>
+		Ulises
+	</pers:nombre>
+	<pers:apellido>
+		Tropeado
+	</pers:apellido>
+	<mascota xmlns:masc="http://github.com/alansastre/xml-examples/mascotas">
+		<nombre>
+			Cigüeña
+		</nombre>
+		<peso>
+			21
+		</peso>
+	</mascota>
+</pers:personas>
+
+
+<!-- El mismo que el anterior pero declarando los dos namespaces por defecto -->
+<?xml version="1.0" encoding="utf-8"?>
+<personas xmlns:pers="http://github.com/alansastre/xml-examples/personas">
+	<nombre>
+		Segismundo
+	</nombre>
+	<apellido>
+		Cruel
+	</apellido>
+	<mascota xmlns:masc="http://github.com/alansastre/xml-examples/mascotas">
+		<!--Ahora tenemos otro namespace por defecto-->
+		<nombre>
+			Pig Bang
+		</nombre>
+		<peso>
+			21
+		</peso>
+	</mascota>
+</personas>
