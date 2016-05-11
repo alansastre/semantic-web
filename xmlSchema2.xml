@@ -1,0 +1,141 @@
+<!-- XML Schema Más ejemplos -->
+
+<!-- EJEMPLO 1 - Elemento con contenido tipo de dato predefinido (string) y con un atributo restringido -->
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas
+	 xmlns:pers="http://github.com/alansastre/xml-examples/personas"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://github.com/alansastre/xml-examples/personas XMLSchema-ejemplo1.xsd">
+	<pers:persona>
+		<pers:nombre tipoNombre="comun">
+			Elvis
+		</pers:nombre>
+		<pers:apellido>
+			Tek
+		</pers:apellido>
+		<pers:edad>
+			56
+		</pers:edad>
+	</pers:persona>
+</pers:personas>
+
+
+<!-- XML Schema para el ejemplo 1: -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<xsd:element name="personas">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="persona">
+					<xsd:complexType>
+						<xsd:sequence>
+
+							<xsd:element name="nombre">
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="xsd:string">
+											<xsd:attribute name="tipoNombre">
+												<xsd:simpleType>
+													<xsd:restriction base="xsd:string">
+														<xsd:enumeration value="comun"/>
+														<xsd:enumeration value="no-comun"/>
+													</xsd:restriction>
+												</xsd:simpleType>
+											</xsd:attribute>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="apellido" type="xsd:string"/>
+							<xsd:element name="edad" type="xsd:integer"/>
+
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+
+<!-- EJEMPLO 2 - Elemento con contenido tiop de dato predefinido (string) con restricción y con un atributo también restringido -->
+<?xml version="1.0" encoding="UTF-8"?>
+<pers:personas
+	 xmlns:pers="http://github.com/alansastre/xml-examples/personas"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://github.com/alansastre/xml-examples/personas XMLSchema-ejemplo2.xsd">
+	<pers:persona estudios="superiores">
+		<pers:estadoCivil codigo="21008">casado</pers:estadoCivil>
+		<pers:nombre>
+			Elcol
+		</pers:nombre>
+		<pers:apellido>
+			Gao
+		</pers:apellido>
+		<pers:edad>
+			21
+		</pers:edad>
+	</pers:persona>
+</pers:personas>
+
+<!-- XML Schema para el ejemplo 2: -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<attributeGroup name="personaAtributos">
+		<attribute name="estudios" type="string"/>
+	</attributeGroup>
+	<simpleType name="tipoEstadoCivil">
+		<restriction base="string">
+			<enumeration value="soltero"/>
+			<enumeration value="casado"/>
+			<enumeration value="divorciado"/>
+		</restriction>
+	</simpleType>
+	<element name="personas">
+		<complexType>
+			<sequence> 
+
+				<element name="persona">
+					<complexType>
+						<sequence>
+
+							<element name="estadoCivil">
+								<complexType>
+									<simpleContent>
+										<extension base="target:tipoEstadoCivil">
+											<attribute name="codigo">
+												<simpleType>
+													<restriction base="integer">
+														<enumeration value="21008"/>
+														<enumeration value="21009"/>
+													</restriction>
+												</simpleType>
+											</attribute>
+										</extension>
+									</simpleContent>
+								</complexType>
+							</element>
+
+							<element name="nombre" type="string"/>
+							<element name="apellido" type="string"/>
+							<element name="edad" type="integer"/>
+
+						</sequence>
+						<attributeGroup ref="target:personaAtributos"/>
+					</complexType>
+					
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+</schema>
