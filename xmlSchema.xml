@@ -1,0 +1,754 @@
+<!-- XML Schema Examples-->
+
+
+<!-- EJEMPLO 1: Documento XML que usa XML Schema -->
+
+<!-- Once you have the XML Schema Instance namespace available:
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+you can use the schemaLocation attribute. This attribute has two values, separated by a space.
+The first value is the namespace to use. The second value is the location of the XML schema to use for that namespace:
+xsi:schemaLocation="http://github.com/alansastre/xml-examples/personas ejemplo1.xsd"> -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas
+	 xmlns:pers="http://github.com/alansastre/xml-examples/personas"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://github.com/alansastre/xml-examples/personas XMLSchema-ejemplo1.xsd">
+
+	<pers:persona>
+		<pers:nombre>
+			Pepe
+		</pers:nombre>
+		<pers:apellido>
+			Lado
+		</pers:apellido>
+	</pers:persona>
+</pers:personas>
+
+<!-- DTD para el documento (habría que poner la referencia al DTD en vez de al esquema en el documento
+XML) -->
+<!ELEMENT pers:personas (pers:persona)>
+<!ELEMENT pers:persona (pers:nombre, pers:apellido, pers:edad)>
+<!ELEMENT pers:nombre (#PCDATA)>
+<!ELEMENT pers:apellido (#PCDATA)>
+<!ELEMENT pers:edad (#PCDATA)>
+<!ATTLIST pers:personas xmlns:pers CDATA #REQUIRED>
+
+<!-- 
+PCDATA is text that WILL be parsed by a parser. The text will be examined by the parser for entities and markup.
+CDATA is text that will NOT be parsed by a parser. -->
+
+
+<!-- XML Schema para el documento -->
+<?xml version="1.0" encoding="utf-8"?>
+<!-- El nombre del namespace no necesita ser igual al que se usará en el
+documento XML (pers:). De hecho, cada documento XML podrá utilizar
+el prefijo de namespace que quiera. -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+<!-- No se necesita poner el namespace en el nombre del elemento (element name="pers:persona")
+porque se que la definición es para el namespace especificado en el atributo targetNamespace-->
+	<xsd:element name="personas">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="persona">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="nombre" type="xsd:string"/>
+							<xsd:element name="apellido" type="xsd:string"/>
+							<xsd:element name="edad" type="xsd:integer"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
+<!-- 
+Elementos del xml schema que acabamos de definir:
+
+1 - xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+
+Indica que los elementos y tipos de datos empleados en el schema están en el namespace "http://www.w3.org/2001/XMLSchema".
+También especifica que dichos elementos y tipos deben tener el prefijo xsd.
+
+2 - xmlns:target="http://github.com/alansastre/xml-examples/personas"
+
+Indica un namespace "http://github.com/alansastre/xml-examples/personas" cuyo prefijo es target
+
+3- targetNamespace="http://github.com/alansastre/xml-examples/personas"
+
+Indica que los elementos definidos por el schema vienen del namespace "http://github.com/alansastre/xml-examples/personas"
+
+4 - elementFormDefault="qualified"
+
+Optional. The form for elements declared in the target namespace of this schema. The value must be "qualified" or "unqualified". Default is "unqualified". "unqualified" indicates that elements from the target namespace are not required to be qualified with the namespace prefix. "qualified" indicates that elements from the target namespace must be qualified with the namespace prefix
+
+Básicamente se resume en que si es qualified como en este caso es obligatorio en el xml de arriba especificar el prefijo del namespace targetNamespace en los elementos que pertenezcan al mismo, como ocurre en este caso, todos tienen el prefijo pers:. 
+
+
+Ocurre lo mismo para el caso de los atributos pero utilizando: attributeFormDefault
+-->
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+
+<!-- EJEMPLO 2: XML Schema para el XML anterior utilizando un tipo complejo global -->
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+<!-- Este tipo complejo (personaType) es global porque está declarado como hijo directo
+de la etiqueta <xsd:schema>-->
+	<xsd:complexType name="personaType">
+		<xsd:sequence>
+			<xsd:element name="nombre" type="xsd:string"/>
+			<xsd:element name="apellido" type="xsd:string"/>
+			<xsd:element name="edad" type="xsd:integer"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="personas">
+		<xsd:complexType>
+			<xsd:sequence>
+				<!-- El valor del atributo type debe llevar como prefijo el nombre del
+				namespace target -->
+				<xsd:element name="persona" type="target:personaType" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
+
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+<!-- EJEMPLO 3: XML Schema para el XML anterior utilizando referencias a elementos globales -->
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<!-- Ahora estos son elementos globales -->
+	<xsd:element name="nombre" type="xsd:string"/>
+	<xsd:element name="apellido" type="xsd:string"/>
+	<xsd:element name="edad" type="xsd:integer"/>
+	<xsd:complexType name="personaType">
+		<xsd:sequence>
+			<xsd:element ref="target:nombre"/><!-- Referencia a un elemento -->
+			<xsd:element ref="target:apellido"/>
+			<xsd:element ref="target:edad"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="personas">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="persona" type="target:personaType" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+
+<!-- 	EJEMPLO4: XML Schema, igual que el anterior pero declarando un grupo global -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<xsd:element name="nombre" type="xsd:string"/>
+	<xsd:element name="apellido" type="xsd:string"/>
+	<xsd:element name="edad" type="xsd:integer"/>
+	<xsd:group name="grupoPersona">
+		<xsd:sequence>
+			<xsd:element ref="target:nombre"/>
+			<xsd:element ref="target:apellido"/>
+			<xsd:element ref="target:edad"/>
+		</xsd:sequence>
+	</xsd:group>
+	<!-- Ahora se usa el grupo, observar el uso del namespace target -->
+	<xsd:complexType name="personaType">
+		<xsd:group ref="target:grupoPersona"></xsd:group>
+	</xsd:complexType>
+	<!-- Ahora se usa el tipo complejo global igual que antes -->
+	<xsd:element name="personas">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="persona" type="target:personaType"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
+
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+<!-- EJEMPLO 5: Documento XML con elemento con mixed content -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas
+	 xmlns:pers="http://github.com/alansastre/xml-examples/personas"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://github.com/alansastre/xml-examples/personas XMLSchema-ejemplo5.xsd">
+
+	<pers:persona>
+		<pers:nombre>
+			Aitor
+		</pers:nombre>
+		<pers:apellido>
+			Tilla
+		</pers:apellido>
+		<pers:edad>
+			567
+		</pers:edad>
+<!-- 		Empieza el elemento con mixed content -->
+		<pers:descripcion>
+			La <pers:strong>profesión</pers:strong> de esta persona es <pers:em>
+			fontanero</pers:em> amateur
+		</pers:descripcion>
+<!-- 		Termina el elemento con mixed content -->
+	</pers:persona>
+</pers:personas>
+
+<!-- XML Schema para el documento anterior -->
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<xsd:element name="nombre" type="xsd:string"/>
+	<xsd:element name="apellido" type="xsd:string"/>
+	<xsd:element name="edad" type="xsd:integer"/>
+	<xsd:complexType name="personaType">
+		<xsd:sequence>
+			<xsd:element ref="target:nombre"/>
+			<xsd:element ref="target:apellido"/>
+			<xsd:element ref="target:edad"/>
+			<xsd:element name="descripcion">
+				<xsd:complexType mixed="true">
+					<xsd:choice minOccurs="0" maxOccurs="unbounded">
+						<xsd:element name="em" type="xsd:string" />
+						<xsd:element name="strong" type="xsd:string" />
+					</xsd:choice>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="personas">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="persona" type="target:personaType"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
+
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+<!-- EJEMPLO 6: Documento XML con el elemento <edad> descolocado -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas
+	 xmlns:pers="http://github.com/alansastre/xml-examples/personas"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://github.com/alansastre/xml-examples/personas XMLSchema-ejemplo6.xsd">
+	<pers:persona>
+		<pers:nombre>
+			Armando
+		</pers:nombre>
+		<pers:edad>
+			21
+		</pers:edad>
+		<pers:apellido>
+			Adistancia
+		</pers:apellido>
+	</pers:persona>
+</pers:personas>
+
+<!-- XML Schema con declaración <all> para no obligar a un orden en los elementos <nombre> <apellido> y <edad> -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<xsd:element name="nombre" type="xsd:string"/>
+	<xsd:element name="apellido" type="xsd:string"/>
+	<xsd:element name="edad" type="xsd:integer"/>
+	<xsd:complexType name="personaType">
+		<xsd:all>
+			<xsd:element ref="target:nombre"/>
+			<xsd:element ref="target:apellido"/>
+			<xsd:element ref="target:edad"/>
+		</xsd:all>
+	</xsd:complexType>
+	<xsd:element name="personas">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="persona" type="target:personaType"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+
+<!-- EJEMPLO 7: XML con atributo en un elemento de tipo complejo -->
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas
+	 xmlns:pers="http://github.com/alansastre/xml-examples/personas"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://github.com/alansastre/xml-examples/personas XMLSchema-ejemplo7.xsd">
+	<pers:persona sexo="hombre" estudios="superiores">
+		<pers:nombre>
+			Leandro
+		</pers:nombre>
+		<pers:apellido>
+			Gado
+		</pers:apellido>
+		<pers:edad>
+			89
+		</pers:edad>
+	</pers:persona>
+</pers:personas>
+
+
+<!-- XML Schema para el documento anterior -->
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<xsd:element name="personas">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="persona">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="nombre" type="xsd:string"/>
+							<xsd:element name="apellido" type="xsd:string"/>
+							<xsd:element name="edad" type="xsd:integer"/>
+						</xsd:sequence>
+						<!-- El o los atributo/s se pone /n a continuación del sequence o
+						choice en su caso y antes de cerrar la etiqueta <complexType> -->
+						<xsd:attribute name="sexo" type="xsd:string"/>
+						<xsd:attribute name="estudios" type="xsd:string"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
+
+<!-- XML Schema como el anterior pero con grupo de atributos -->
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<!-- Declaración de grupo de atributos -->
+	<xsd:attributeGroup name="personaAtributos">
+		<xsd:attribute name="sexo" type="xsd:string"/>
+		<xsd:attribute name="estudios" type="xsd:string"/>
+	</xsd:attributeGroup>
+	<xsd:element name="personas">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="persona">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="nombre" type="xsd:string"/>
+							<xsd:element name="apellido" type="xsd:string"/>
+							<xsd:element name="edad" type="xsd:integer"/>
+						</xsd:sequence>
+						<!-- Uso del grupo de atributos. Debe indicarse el namespace -->
+						<xsd:attributeGroup ref="target:personaAtributos"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+<!-- EJEMPLO 8: XML con atributo en elemento <nombre> -->
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas
+	 xmlns:pers="http://github.com/alansastre/xml-examples/personas"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://github.com/alansastre/xml-examples/personas XMLSchema-ejemplo8.xsd">
+	<pers:persona sexo="hombre" estudios="superiores">
+		<pers:nombre tipoNombre="cristiano">
+			Ao
+		</pers:nombre>
+		<pers:apellido>
+			Gao
+		</pers:apellido>
+		<pers:edad>
+			24
+		</pers:edad>
+	</pers:persona>
+</pers:personas>
+
+<!-- XML Schema para el documento anterior -->
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<xsd:attributeGroup name="personaAtributos">
+		<xsd:attribute name="sexo" type="xsd:string"/>
+		<xsd:attribute name="estudios" type="xsd:string"/>
+	</xsd:attributeGroup>
+	<xsd:element name="personas">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="persona">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="nombre"><!-- Se quita el type aquí -->
+								<xsd:complexType>
+									<xsd:simpleContent>
+										<xsd:extension base="xsd:string">
+											<xsd:attribute name="tipoNombre" type="xsd:string"/>
+										</xsd:extension>
+									</xsd:simpleContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="apellido" type="xsd:string"/>
+							<xsd:element name="edad" type="xsd:integer"/>
+						</xsd:sequence>
+						<xsd:attributeGroup ref="target:personaAtributos"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+
+<!-- EJEMPLO 9: XML Schema para el ejemplo 7 u 8 con tipo de datos simple definido por el usuario como
+restricción por enumeración. -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<attributeGroup name="personaAtributos">
+		<attribute name="sexo"><!-- Se quita type="string" y se declara el tipo simple -->
+			<simpleType>
+				<restriction base="string">
+					<enumeration value="hombre"/>
+					<enumeration value="mujer"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="estudios" type="string"/>
+	</attributeGroup>
+	<element name="personas">
+		<complexType>
+			<sequence>
+				<element name="persona">
+					<complexType>
+						<sequence>
+							<element name="nombre">
+								<complexType>
+									<simpleContent>
+										<extension base="string">
+											<attribute name="tipoNombre" type="string"/>
+										</extension>
+									</simpleContent>
+								</complexType>
+							</element>
+							<element name="apellido" type="string"/>
+							<element name="edad" type="integer"/>
+						</sequence>
+						<attributeGroup ref="target:personaAtributos"/>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+</schema>
+
+<!-- En este caso no se pone el prefijo xsd porque el namespace declarado arriba es por defecto -->
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+
+<!-- EJEMPLO 10 Documento XML con elemento <sexo> -->
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas
+	 xmlns:pers="http://github.com/alansastre/xml-examples/personas"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://github.com/alansastre/xml-examples/personas XMLSchema-ejemplo10.xsd">
+	<pers:persona estudios="superiores">
+		<!-- No debe haber espacios para que valide correctamente -->
+		<pers:sexo>mujer</pers:sexo>
+		<pers:nombre tipoNombre="cristiano">
+			Unai 
+		</pers:nombre>
+		<pers:apellido>
+			Nomás
+		</pers:apellido>
+		<pers:edad>
+			21
+		</pers:edad>
+	</pers:persona>
+</pers:personas>
+
+<!-- XML Schema para ejemplo anterior, con restricción en elemento <sexo> -->
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<attributeGroup name="personaAtributos">
+		<attribute name="estudios" type="string"/>
+	</attributeGroup>
+	<element name="personas">
+		<complexType>
+			<sequence>
+				<element name="persona">
+					<complexType>
+						<sequence>
+							<element name="sexo">
+								<simpleType>
+									<restriction
+										base="string">
+										<enumeration
+											value="hombre"/>
+											<enumeration
+												value="mujer"/>
+											</restriction>
+										</simpleType>
+									</element>
+									<element name="nombre">
+										<complexType>
+											<simpleContent>
+												<extension base="string">
+													<attribute name="tipoNombre" type="string"/>
+												</extension>
+											</simpleContent>
+										</complexType>
+									</element>
+									<element name="apellido" type="string"/>
+									<element name="edad" type="integer"/>
+								</sequence>
+								<attributeGroup ref="target:personaAtributos"/>
+							</complexType>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+		</schema>
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+
+<!-- EJEMPLO 11 Documento XML con elemento <estadoCivil> que tiene un tipo de datos simple con
+restricción y un atributo -->
+<?xml version="1.0" encoding="UTF-8"?>
+<pers:personas
+	 xmlns:pers="http://github.com/alansastre/xml-examples/personas"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://github.com/alansastre/xml-examples/personas XMLSchema-ejemplo11.xsd">
+	<pers:persona estudios="superiores">
+		<!-- Ahora tenemos un contenido sencillo con enumeración de los posibles valores más
+		un atributo -->
+		<pers:estadoCivil fecha="2008">casado</pers:estadoCivil>
+		<pers:nombre>
+			Pepe
+		</pers:nombre>
+		<pers:apellido>
+			Roni
+		</pers:apellido>
+		<pers:edad>
+			21
+		</pers:edad>
+	</pers:persona>
+</pers:personas>
+
+<!-- XML Schema para documento anterior -->
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<attributeGroup name="personaAtributos">
+		<attribute name="estudios" type="string"/>
+	</attributeGroup>
+	<!-- Estado civil definido como un tipo global, se utilizará como tipo de un elemento
+	debe declararse global porque ese elemento va a tener un atributo asociado -->
+	<simpleType name="tipoEstadoCivil">
+		<restriction base="string">
+			<enumeration value="soltero"/>
+			<enumeration value="casado"/>
+			<enumeration value="divorciado"/>
+		</restriction>
+	</simpleType>
+	<element name="personas">
+		<complexType>
+			<sequence>
+				<element name="persona">
+					<complexType>
+						<sequence>
+							<element name="estadoCivil">
+								<complexType>
+									<simpleContent>
+										<!-- Para poder extender el tipoEstadoCivil en el atributo hay que declararlo fuera-->
+										<extension base="target:tipoEstadoCivil">
+											<attribute name="fecha" type="integer"/>
+										</extension>
+									</simpleContent>
+								</complexType>
+							</element>
+							<element name="nombre" type="string"/>
+							<element name="apellido" type="string"/>
+							<element name="edad" type="integer"/>
+						</sequence>
+						<attributeGroup ref="target:personaAtributos"/>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+</schema>
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+
+<!-- EJEMPLO 12: Documento XML, en el que se utilizan dos namespaces -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas
+	 xmlns:pers="http://github.com/alansastre/xml-examples/personas"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://github.com/alansastre/xml-examples/personas XMLSchema-ejemplo12.xsd">
+	<pers:persona>
+		<pers:nombre>
+			Pepe
+		</pers:nombre>
+		<pers:apellido>
+			Roni
+		</pers:apellido>
+		<masc:mascota xmlns:masc="http://github.com/alansastre/xml-examples/mascotas">
+			<masc:nombre>
+				Arbusto
+			</masc:nombre>
+			<masc:peso>
+				21
+			</masc:peso>
+		</masc:mascota>
+	</pers:persona>
+</pers:personas>
+
+
+<!-- XML Schemas que describen la estructura de los elementos de los dos namespaces. El primer XML
+Schema (XMLSchema-ejemplo12.xsd) importa al segundo (XMLSchema-mascotas-ejemplo12.xsd) -->
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 xmlns:mascot="http://github.com/alansastre/xml-examples/mascotas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas" 
+	 elementFormDefault="qualified">
+	<import namespace="http://github.com/alansastre/xml-examples/mascotas" schemaLocation="XMLSchema-mascotas-ejemplo12.xsd"/>
+	<element name="personas">
+		<complexType>
+			<sequence>
+				<element name="persona">
+					<complexType>
+						<sequence>
+							<element name="nombre" type="string"/>
+							<element name="apellido" type="string"/>
+							<!-- Referencia al elemento del XML Schema importado -->
+							<element ref="mascot:mascota"/>
+						</sequence>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+</schema>
+<!-- ················································································································ -->
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/mascotas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/mascotas"
+	 elementFormDefault="qualified">
+	<element name="mascota">
+		<complexType>
+			<sequence>
+				<element name="nombre" type="string"/>
+				<element name="peso" type="double"/>
+			</sequence>
+		</complexType>
+	</element>
+</schema>
+
+<!-- ********************************************************************************************** -->
+<!-- ********************************************************************************************** -->
+
+<!-- EJEMPLO 13 XML con elemento <edad> con valores restringidos -->
+<?xml version="1.0" encoding="utf-8"?>
+<pers:personas
+	 xmlns:pers="http://github.com/alansastre/xml-examples/personas"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://github.com/alansastre/xml-examples/personas XMLSchema-ejemplo13.xsd">
+	<pers:persona>
+		<pers:nombre>
+			Olga
+		</pers:nombre>
+		<pers:apellido>
+			Seosa
+		</pers:apellido>
+		<pers:edad>
+			27
+		</pers:edad>
+	</pers:persona>
+</pers:personas>
+
+<!-- XML Schema para el ejemplo anterior -->
+<?xml version="1.0" encoding="utf-8"?>
+<!-- El nombre del namespace no necesita ser igual al que se usará en el
+documento XML (pers:). De hecho, cada documento XML podrá utilizar
+el prefijo de namespace que quiera. -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 xmlns:target="http://github.com/alansastre/xml-examples/personas"
+	 targetNamespace="http://github.com/alansastre/xml-examples/personas"
+	 elementFormDefault="qualified">
+	<!-- No se necesita poner el namespace en el nombre del elemento (element name="pers:persona")
+	porque se que la definición es para el namespace especificado en el atributo targetNamespace-->
+	<xsd:element name="personas">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="persona">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="nombre" type="xsd:string"/>
+							<xsd:element name="apellido" type="xsd:string"/>
+							<xsd:element name="edad">
+								<xsd:simpleType>
+									<!--Restriccion edad -->
+									<xsd:restriction base="xsd:integer">
+										<xsd:minInclusive value="0"/>
+										<xsd:maxInclusive value="100"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
