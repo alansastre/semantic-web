@@ -1,0 +1,340 @@
+<!-- XML: EJEMPLOS CON RDF -->
+
+<!-- EJEMPLO 1 -->
+
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros">
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor>Fernando Pérez</lib:autor>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+
+<!-- EJEMPLO 2 - Incluyendo información sobre el autor. -->
+
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:pers="http://torio.unileon.es/~dieigr/personas"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros">
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor rdf:resource="http://una.uri.para.el.autor/autorFernandoPerez"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://una.uri.para.el.autor/autorFernandoPerez">
+		<pers:nombre>Fernando</pers:nombre>
+		<pers:apellido>Pérez</pers:apellido>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+
+<!-- EJEMPLO 3 - Simplificación sintáctica del ejemplo 2 - blank node -->
+
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:pers="http://torio.unileon.es/~dieigr/personas"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros">
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor>
+			<rdf:Description>
+				<pers:nombre>Fernando</pers:nombre>
+				<pers:apellido>Pérez</pers:apellido>
+			</rdf:Description>
+		</lib:autor>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+<!-- EJEMPLO 4 - Simplificación del ejemplo 3 -->
+
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:pers="http://torio.unileon.es/~dieigr/personas"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros">
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor pers:nombre="Fernando" pers:apellido="Pérez"/>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+
+<!-- EJEMPLO 5 - Uso de atributo parseType="Resource" -->
+
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:pers="http://torio.unileon.es/~dieigr/personas"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros">
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor rdf:parseType="Resource">
+			<pers:nombre>Fernando</pers:nombre>
+			<pers:apellido>Pérez</pers:apellido>
+		</lib:autor>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+
+<!-- EJEMPLO 6 - Uso de atributo parseType -->
+
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:pers="http://torio.unileon.es/~dieigr/personas"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros">
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor rdf:parseType="Resource"/>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+
+<!-- EJEMPLO 7 - Uso de atributo nodeID -->
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:pers="http://torio.unileon.es/~dieigr/personas"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros">
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor>
+			<rdf:Description rdf:nodeID="AA3345">
+				<pers:nombre>Fernando</pers:nombre>
+				<pers:apellido>Pérez</pers:apellido>
+			</rdf:Description>
+		</lib:autor>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+
+
+<!-- EJEMPLO 8 - Uso de atributo rdf:ID -->
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:pers="http://torio.unileon.es/~dieigr/personas"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros"
+	xml:base="http://base.para.todas.las.URI.relativas/">
+	<rdf:Description rdf:ID="prueba"><!--Se conseguiría lo mismo con rdf:about="#prueba"-->
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor rdf:resource="autorFernandoPerez"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="autorFernandoPerez">
+		<pers:nombre>Fernando</pers:nombre>
+		<pers:apellido>Pérez</pers:apellido>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+
+
+<!-- EJEMPLO 9 - Objeto (valor de predicado) complejo -->
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:pers="http://torio.unileon.es/~dieigr/personas"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros">
+	<rdf:Description rdf:about="http://uris.com/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor>
+			<rdf:Description>
+				<pers:nombre>Fernando</pers:nombre>
+				<pers:apellido>Pérez</pers:apellido>
+				<pers:edad>
+					<rdf:Description rdf:about="http://uris.com/edad/edadFernando">
+						<pers:valor_edad>23</pers:valor_edad>
+						<pers:unidad_edad>años</pers:unidad_edad>
+					</rdf:Description>
+				</pers:edad>
+			</rdf:Description>
+		</lib:autor>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+<!-- EJEMPLO 10 - Ejemplo de rdf:value -->
+
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:pers="http://torio.unileon.es/~dieigr/personas"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros">
+	<rdf:Description rdf:about="http://uris.com/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor>
+			<rdf:Description>
+				<pers:nombre>Fernando</pers:nombre>
+				<pers:apellido>Pérez</pers:apellido>
+				<pers:edad rdf:parseType="Resource">
+					<rdf:value>23</rdf:value>
+					<pers:unidad_edad>años</pers:unidad_edad>
+				</pers:edad>
+			</rdf:Description>
+		</lib:autor>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+
+<!-- EJEMPLO 11 - Ejemplo de rdf:type -->
+
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:pers="http://torio.unileon.es/~dieigr/personas"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros"
+	xmlns:clases="http://uris.com/clases">
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<rdf:type rdf:resource="http://uris.com/clases/libro"/>
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor>
+			<rdf:Description>
+				<rdf:type rdf:resource="http://uris.com/clases/persona"/>
+				<pers:nombre>Fernando</pers:nombre>
+				<pers:apellido>Pérez</pers:apellido>
+			</rdf:Description>
+		</lib:autor>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+<!-- EJEMPLO 12 - Ejemplo de especificación de tipo de forma abreviada -->
+
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:pers="http://torio.unileon.es/~dieigr/personas"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros"
+	xmlns:clases="http://uris.com/clases/">
+	<clases:Libro rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor>
+			<clases:Persona>
+				<pers:nombre>Fernando</pers:nombre>
+				<pers:apellido>Pérez</pers:apellido>
+			</clases:Persona>
+		</lib:autor>
+	</clases:Libro>
+</rdf:RDF>
+
+
+
+
+<!-- EJEMPLO 13 - Separar predicados en diferentes bloques Description - comparar con EJEMPLO 1 -->
+
+
+<!-- ejemplo 1 -->
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros">
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autor>Fernando Pérez</lib:autor>
+	</rdf:Description>
+</rdf:RDF>
+
+<!-- ejemplo 13 -->
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros">
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<lib:autor>Fernando Pérez</lib:autor>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+
+<!-- EJEMPLO 14 - Propiedades que no se repiten pueden ser creadas como atributos de los recursos 1 -->
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros">
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava"
+		lib:titulo="Introducción a Java"
+		lib:autor="Fernando Pérez"/>
+</rdf:RDF>
+
+
+
+
+
+<!-- 	EJEMPLO 15 - Ejemplo de reificación -->
+
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:tm="http://uris.com/tiempoMetereologico/"
+	xmlns:acc="http://uris.com/acciones/">
+	<rdf:Description rdf:about="http://uris.com/personas#Juan">
+		<acc:dice rdf:parseType="Resource">
+			<rdf:subject>
+				<rdf:Description rdf:about="http://uris.com/tiempoMetereologicoLeonProximoDia"/>
+			</rdf:subject>
+			<rdf:predicate rdf:resource="http://uris.com/acciones/pronostico" />
+			<rdf:object>Soleado</rdf:object>
+		</acc:dice>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+<!-- EJEMPLO 15 - Ejemplo de contenedores - bag -->
+<?xml version="1.0"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:lib="http://torio.unileon.es/~dieigr/libros"
+	xml:base="http://torio.unileon.es/~dieigr/personas">
+	<rdf:Description rdf:about="http://una.uri.en.forma.de.url/libro/introJava">
+		<lib:titulo>Introducción a Java</lib:titulo>
+		<lib:autores>
+			<rdf:Bag rdf:ID="listaAutores1">
+				<rdf:li rdf:resource="Juan"/>
+				<rdf:li rdf:resource="Carmen"/>
+				<rdf:li rdf:resource="Luis"/>
+				<rdf:li rdf:resource="Maria"/>
+			</rdf:Bag>
+		</lib:autores>
+	</rdf:Description>
+</rdf:RDF>
