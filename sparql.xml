@@ -1,0 +1,278 @@
+<!-- EJEMPLOS DE SPARQL
+(motor online: http://demo.openlinksw.com/sparql
+ó
+http://dbpedia-live.openlinksw.com/sparql/)  -->
+
+
+<!-- EJEMPLO 1 - Documento RDF para ejemplos de SPARQL -->
+
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:ontoV="http://torio.unileon.es/~dieigr/Ontology#">
+	<!--************************* VEHICULOS ****************************-->
+	<rdf:Description rdf:about="http://una.url/renaultMegane-2334-CBC">
+		<rdf:type rdf:resource="http://torio.unileon.es/~dieigr/Ontology#Coche"/>
+		<ontoV:esConducidoPor rdf:resource="http://una.url.com/fernando"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://una.url/pegaso-4564-ABC">
+		<rdf:type rdf:resource="http://torio.unileon.es/~dieigr/Ontology#Camion"/>
+		<ontoV:esConducidoPor rdf:resource="http://una.url.com/luis"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://una.url/man-2222-NBC">
+		<rdf:type rdf:resource="http://torio.unileon.es/~dieigr/Ontology#Camion"/>
+		<ontoV:esConducidoPor rdf:resource="http://una.url.com/juan"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://una.url/renault18-M-3333-V">
+		<rdf:type rdf:resource="http://torio.unileon.es/~dieigr/Ontology#Coche"/>
+		<ontoV:esConducidoPor rdf:resource="http://una.url.com/luis"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://una.url/trailerMercedes">
+		<rdf:type rdf:resource="http://torio.unileon.es/~dieigr/Ontology#Camion"/>
+		<ontoV:esConducidoPor rdf:resource="http://una.url.com/maria"/>
+	</rdf:Description>
+	<!--************************* PERSONAS ****************************-->
+	<rdf:Description rdf:about="http://una.url.com/fernando">
+		<rdf:type rdf:resource="http://torio.unileon.es/~dieigr/Ontology#Conductor"/>
+		<ontoV:viveEn rdf:resource="http://una.url.com/Paris"/>
+		<ontoV:nombre>Fernando</ontoV:nombre>
+		<ontoV:apellido>Gomez</ontoV:apellido>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://una.url.com/luis">
+		<rdf:type rdf:resource="http://torio.unileon.es/~dieigr/Ontology#Conductor"/>
+		<ontoV:viveEn rdf:resource="http://una.url.com/Londres"/>
+		<ontoV:nombre>Luis</ontoV:nombre>
+		<ontoV:apellido>Sanz</ontoV:apellido>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://una.url.com/juan">
+		<rdf:type rdf:resource="http://torio.unileon.es/~dieigr/Ontology#Conductor"/>
+		<ontoV:viveEn rdf:resource="http://una.url.com/Manchester"/>
+		<ontoV:nombre>Juan</ontoV:nombre>
+		<ontoV:apellido>Aguirrezabalaga</ontoV:apellido>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://una.url.com/maria">
+		<rdf:type rdf:resource="http://torio.unileon.es/~dieigr/Ontology#Persona"/>
+		<ontoV:viveEn rdf:resource="http://una.url.com/Paris"/>
+		<ontoV:nombre>MarÃa</ontoV:nombre>
+		<ontoV:apellido>Buiza</ontoV:apellido>
+	</rdf:Description>
+	<rdf:Description rdf:about="http://una.url.com/julian">
+		<rdf:type rdf:resource="http://torio.unileon.es/~dieigr/Ontology#Persona"/>
+		<ontoV:viveEn rdf:resource="http://una.url.com/Manchester"/>
+		<ontoV:nombre>Julian</ontoV:nombre>
+		<ontoV:apellido>Gomez</ontoV:apellido>
+	</rdf:Description>
+	<!--************************* CIUDADES ****************************-->
+	<ontoV:Ciudad rdf:about="http://una.url.com/Paris">
+		<ontoV:perteneceAPais rdf:resource="http://una.url.com/Francia"/>
+	</ontoV:Ciudad>
+	<ontoV:Ciudad rdf:about="http://una.url.com/Londres">
+		<ontoV:perteneceAPais rdf:resource="http://una.url.com/UK"/>
+	</ontoV:Ciudad>
+	<ontoV:Ciudad rdf:about="http://una.url.com/Manchester">
+		<ontoV:perteneceAPais rdf:resource="http://una.url.com/UK"/>
+	</ontoV:Ciudad>
+	<!--************************* PAISES ****************************-->
+	<ontoV:Pais rdf:about="http://una.url.com/Francia">
+		<ontoV:habitantes>43000000</ontoV:habitantes>
+	</ontoV:Pais>
+	<ontoV:Pais rdf:about="http://una.url.com/UK">
+		<ontoV:habitantes>54000000</ontoV:habitantes>
+	</ontoV:Pais>
+</rdf:RDF>
+
+
+
+<!-- EJEMPLOS DE CONSULTAS DE SPARQL SOBRE EL RDF ANTERIOR: -->
+
+
+<!-- consulta qué coches hay -->
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ontoV: <http://torio.unileon.es/~dieigr/Ontology#>
+SELECT ?co
+FROM <http://dl.dropbox.com/u/19889713/Ejemplo_1_triplas_RDF.xml>
+WHERE {
+	?co rdf:type ontoV:Coche .
+}
+
+<!-- devuelve:
+
+co
+http://una.url/renaultMegane-2334-CBC
+http://una.url/renault18-M-3333-V -->
+
+<!-- ************************************************************************************************************-->
+<!-- consulta qué ciudades hay -->
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ontoV: <http://torio.unileon.es/~dieigr/Ontology#>
+SELECT ?suj
+FROM <http://dl.dropbox.com/u/19889713/Ejemplo_1_triplas_RDF.xml>
+WHERE {
+	?suj rdf:type ontoV:Ciudad .
+}
+
+<!-- devuelve: 
+
+suj
+http://una.url.com/Paris
+http://una.url.com/Londres
+http://una.url.com/Manchester
+-->
+
+<!-- ************************************************************************************************************-->
+
+<!-- consulta todas las triplas (compuestas por sujeto, predicado, objeto) -->
+
+SELECT ?suj
+FROM <http://dl.dropbox.com/u/19889713/Ejemplo_1_triplas_RDF.xml>
+WHERE { 
+	?suj ?pred ?obj .
+	 }
+
+<!-- devuelve:
+suj
+http://una.url/renaultMegane-2334-CBC
+http://una.url/renaultMegane-2334-CBC
+http://una.url.com/fernando
+http://una.url.com/fernando
+http://una.url/pegaso-4564-ABC
+http://una.url/pegaso-4564-ABC
+http://una.url.com/luis
+http://una.url.com/luis
+http://una.url/man-2222-NBC
+http://una.url/man-2222-NBC
+http://una.url.com/juan
+http://una.url.com/juan
+http://una.url/renault18-M-3333-V
+http://una.url/renault18-M-3333-V
+http://una.url/trailerMercedes
+http://una.url/trailerMercedes
+http://una.url.com/maria
+http://una.url.com/maria
+http://una.url.com/Paris
+http://una.url.com/Paris
+http://una.url.com/Londres
+http://una.url.com/Londres
+http://una.url.com/Manchester
+http://una.url.com/Manchester
+http://una.url.com/julian
+http://una.url.com/julian
+http://una.url.com/Francia
+http://una.url.com/Francia
+http://una.url.com/UK
+http://una.url.com/UK -->
+
+<!-- ************************************************************************************************************-->
+
+<!-- consulta qué personas conducen qué coches -->
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ontoV: <http://torio.unileon.es/~dieigr/Ontology#>
+SELECT ?coche ?perso
+FROM <http://dl.dropbox.com/u/19889713/Ejemplo_1_triplas_RDF.xml>
+WHERE {
+	?coche rdf:type
+	ontoV:Coche .
+	?coche ontoV:esConducidoPor
+	?perso .
+}
+
+<!-- devuelve:
+coche 											perso
+http://una.url/renaultMegane-2334-CBC 	http://una.url.com/fernando
+http://una.url/renault18-M-3333-V		http://una.url.com/luis -->
+
+
+<!-- ************************************************************************************************************-->
+
+<!-- consultar personas conductores, su nombre, su ciudad, el pais al que pertenece la ciudad y el numero de 
+habitantes que tiene ese pais: -->
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ontoV: <http://torio.unileon.es/~dieigr/Ontology#>
+SELECT ?conductor ?nombre ?ciudad ?pais ?numhab
+WHERE{
+	?conductor rdf:type ontoV:Conductor . 
+	?conductor ontoV:nombre ?nombre . 
+	?conductor ontoV:viveEn ?ciudad . 
+	?ciudad ontoV:perteneceAPais ?pais . 
+	?pais ontoV:habitantes ?numhab .  
+}
+
+
+<!-- ejercicio 2: -->
+
+<?xml version="1.0" ?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdf="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:v=".../2006/vcard/ns#">
+	<rdf:Description rdf:about=".../datos#Pepe">
+		<rdf:type rdf:resource="/vcard/ns#VCard"/>
+		<v:fn>José</v:fn>
+		<v:nickname>Pepe</v:nickname>
+		<v:tel>
+			<rdf:Description>
+				<rdf:type rdf:resource=".../vcard/ns#Voice"/>
+				<rdf:value>+34999291122</rdf:value>
+				<rdf:type rdf:resource=".../vcard/ns#Home"/>
+			</rdf:Description>
+		</v:tel>
+		<v:email rdf:resource="mailto:pepe@unileon.es"/>
+		<v:adr>
+			<rdf:Description>
+				<rdf:type rdf:resource=".../vcard/ns#Home"/>
+				<v:locality>León</v:locality>
+				<v:postal-code>24071</v:postal-code>
+				<v:country-name>España</v:country-name>
+				<v:street-address>Av.Facultad Veterinaria, 25</v:street-address>
+			</rdf:Description>
+		</v:adr>
+	</rdf:Description>
+</rdf:RDF>
+
+
+
+
+<!-- ejercicio 3: se pide crear consultas SPARQL que saquen por pantalla -->
+
+<!-- a. Un listado que contenga el identificador del coche y el nombre de quien lo conduce
+para aquellos sujetos que vivan en Francia -->
+
+PREFIX rdf: <http...>
+PREFIX ontoV: <http .... >
+SELECT ?coche ?persona ?nombrePersona ?ciudad 
+FROM <http...> 
+FROM <http...> 
+FROM <http...> 
+WHERE {
+	?coche rdf:type ontoV:Coche .
+	?coche ontoV:esConducidoPor ?persona .
+	?persona ontoV:nombre ?nombrePersona
+	?nombrePersona ontoV:viveEn ?ciudad .
+	?ciudad ontoV:perteneceAPais <http..../Francia> .
+<!-- 	tambien se podía poner:
+	?ciudad ontoV:perteneceAPais ?pais
+	FILTER(?pais = <http..../Francia>) -->
+
+}	
+
+
+<!-- b. Un listado que contenga el identificador del coche y el nombre de quien lo conduce
+para aquellos sujetos que vivan en países con más de 55 millones de habitantes -->
+
+PREFIX rdf: <http...>
+PREFIX ontoV: <http....>
+SELECT ?coche ?persona ?nombrePersona ?ciudad ?pais ?numhab
+FROM <http...1>
+FROM <http....2>
+FROM <http ... 3>
+WHERE{
+	?coche rdf:type ontoV:Coche . 
+	?coche ontoV:esConducidoPor ?persona .
+	?persona ontoV:nombre ?nombrePersona . 
+	?nombrePersona ontoV:viveEn ?ciudad . 
+	?ciudad ontoV:perteneceApais ?pais .
+	?pais ontoV:numeroHabitantes ?numhab .
+	FILTER(xsd:integer(?numhab) > 55000000) .
+}
